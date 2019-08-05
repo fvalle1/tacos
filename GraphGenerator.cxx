@@ -24,9 +24,6 @@ void GraphGenerator::MakeGraph() {
     }
 
     //structure for nodes
-    typedef pair<string, int64_t> TitleId;
-    typedef pair<int64_t, checkable> IdCheckable;
-    typedef pair<uint64_t,pair<string,string>> Weight_WordTitle;
     map<string, int64_t> titles; //file_id, node
     map<string, IdCheckable> words;
     vector<Weight_WordTitle> edges;
@@ -82,7 +79,7 @@ void GraphGenerator::MakeGraph() {
                               //condition to work on
                               if (geneIt->second.second <= fMaxOccurrence) { //check checkable condition
                                   if (currentRead >= 1) {//avoid lenght error
-					if(currentRead > 10000) currentRead = 10000; //avoid segmentations
+                                      if(currentRead > 10000) currentRead = 10000; //avoid segmentations
                                       geneIt->second.first = -1; //add to nodes
                                       auto currentDocTitle = FullFilesList[currentDoc].substr(0, BioParameters::getSampleIdLenght());
                                       auto currentDocIterator = titles.find(currentDocTitle);
@@ -106,11 +103,26 @@ void GraphGenerator::MakeGraph() {
     line.clear();
 
     printf("\rcomputing completed..\n");
-    cout<<"adding nodes to graph.."<<endl;
+    if(edges.size()<1e5) {
+        TreeToFile(graphxmlfile, titles, words, edges);
+    }else{
+        VectorsToFile(graphxmlfile, titles, words, edges);
+    }
+    //compress jast generate file
+    printf("\rcompressing..\n");
+    system("rm -f graph.xml.gz");
+    system("gzip graph.xml");
+    cout<<"graph.xml.gz ready..."<<endl;
 
+    cout<<endl;
+}
+
+void GraphGenerator::TreeToFile(fstream &graphxmlfile, title_index &titles, dictionary &words, edge_index &edges){
     ptree xmlstructure;
     ptree graphml;
     addKeyAttrs(graphml);
+
+    cout<<"adding nodes to graph.."<<endl;
 
     ptree graph;
     graph.put("<xmlattr>.id", "G");
@@ -176,12 +188,6 @@ void GraphGenerator::MakeGraph() {
     write_xml(graphxmlfile, xmlstructure, boost::property_tree::xml_writer_make_settings<std::string>(' ', 4));
     graphxmlfile.close();
 
-    //compress jast generate file
-    system("rm -f graph.xml.gz");
-    system("gzip graph.xml");
-    cout<<"graph.xml.gz ready..."<<endl;
-
-    cout<<endl;
 }
 
 void GraphGenerator::addEdge(ptree &graph, uint64_t idSource, uint64_t idTarget, uint64_t weight) const {
@@ -271,6 +277,88 @@ void GraphGenerator::addKeyAttrs(ptree &graphml) const {
     graphml.add_child("key", key2);
 }
 
+void GraphGenerator::VectorsToFile(fstream &graphxmlfile, title_index &titles, dictionary &words, edge_index &edges){
+    graphxmlfile<<R"(<?xml version="1.0" encoding="utf-8"?>)"<<endl;
+    graphxmlfile<<R"(<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">)"<<endl;
+    graphxmlfile<<"\t<key id=\"key0\" for=\"edge\" attr.name=\"count\" attr.type=\"int\"/>"<<endl;
+    graphxmlfile<<"\t<key id=\"key1\" for=\"node\" attr.name=\"kind\" attr.type=\"int\"/>"<<endl;
+    graphxmlfile<<"\t<key id=\"key2\" for=\"node\" attr.name=\"name\" attr.type=\"string\"/>"<<endl;
+    graphxmlfile<<"\t<graph id=\"G\" edgedefault=\"undirected\" parse.nodeids=\"canonical\" parse.edgeids=\"canonical\" parse.order=\"nodesfirst\">"<<endl;
+
+    long long nodescount = 0;
+    graphxmlfile.flush();
+
+    /*
+    * Add documents nodes
+    */
+    cout<<"adding "<< titles.size() << " documents.."<<endl;
+    BOOST_FOREACH(string title, titles | boost::adaptors::map_keys){
+                    auto cDoc = titles.find(title);
+                    if (cDoc->second==-1){
+                        cDoc->second=nodescount;
+                        graphxmlfile<<"\t\t<node id=\"n"<<nodescount++<<"\">"<<endl;
+                        graphxmlfile<<"\t\t\t<data key=\"key1\">0</data>"<<endl;
+                        graphxmlfile<<"\t\t\t<data key=\"key2\">"<<title<<"</data>"<<endl;
+                        graphxmlfile<<"\t\t</node>"<<endl;
+                    }
+                }
+    graphxmlfile.flush();
+
+    /*
+    * Add word nodes
+    */
+    cout<<"adding "<< words.size() <<" words.."<<endl;
+    BOOST_FOREACH(string gene, words | boost::adaptors::map_keys){
+                    auto geneInfo = words.find(gene);
+                    if(geneInfo->second.first==-1) {//have to add as node
+                        geneInfo->second.first=nodescount;
+                        graphxmlfile<<"\t\t<node id=\"n"<<nodescount++<<"\">"<<endl;
+                        graphxmlfile<<"\t\t\t<data key=\"key1\">1</data>"<<endl;
+                        graphxmlfile<<"\t\t\t<data key=\"key2\">"<<gene<<"</data>"<<endl;
+                        graphxmlfile<<"\t\t</node>"<<endl;
+                    }
+                }
+    graphxmlfile.flush();
+
+    /*
+ Add edges
+*/
+
+    auto nEdges = edges.size();
+    int cEdge = 0;
+    uint64_t intEdgeId = 0;
+    cout<<"adding "<< nEdges <<" edges.."<<endl;
+    BOOST_FOREACH(Weight_WordTitle e,edges){
+                    printf("\r%d/%lu edges",++cEdge, nEdges);
+                    if (cEdge%1000==0){
+                        graphxmlfile.flush();//flush file
+                    }
+                    auto wordIndex = words.find(e.second.first)->second.first;
+                    auto docIndex = titles.find(e.second.second)->second;
+                    if(fCounts){
+                        graphxmlfile<<"\t\t<edge id=\"e"<<intEdgeId++<<"\" source=\"n"<<docIndex<<"\" target=\"n"<<wordIndex<<"\">"<<endl;
+                        graphxmlfile<<"\t\t\t<data key=\"key0\">"<<e.first<<"</data>"<<endl; //weight
+                        graphxmlfile<<"\t\t</edge>"<<endl;
+                    }else{
+                        for(uint64_t w = 0; w < e.first; w++) {
+                            graphxmlfile<<"\t\t<edge id=\"e"<<intEdgeId++<<"\" source=\"n"<<docIndex<<"\" target=\"n"<<wordIndex<<"\">"<<endl;
+                            graphxmlfile<<"\t\t</edge>"<<endl;
+                        }
+                    }
+                }
+    cout << endl;
+
+    //clean vectors
+    titles.clear();
+    words.clear();
+    edges.clear();
+    graphxmlfile.flush();
+
+    graphxmlfile<<"\t</graph>"<<endl;
+    graphxmlfile<<"</graphml>"<<endl;
+    graphxmlfile.flush();
+
+}
 
 std::vector<std::string> GraphGenerator::tokenize( const std::string& line )
 {

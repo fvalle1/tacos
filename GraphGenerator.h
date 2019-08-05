@@ -22,6 +22,12 @@
 using namespace std;
 using boost::property_tree::ptree;
 typedef float checkable;
+typedef pair<string, int64_t> TitleId;
+typedef pair<int64_t, checkable> IdCheckable;
+typedef pair<uint64_t,pair<string,string>> Weight_WordTitle;
+typedef map<string, int64_t> title_index;
+typedef vector<Weight_WordTitle> edge_index;
+typedef map<string, IdCheckable> dictionary;
 
 class GraphGenerator {
 public:
@@ -29,6 +35,9 @@ public:
     void MakeGraph();
 
 private:
+    void TreeToFile(fstream &graphxmlfile, title_index &titles, dictionary &words, edge_index &edges);
+    void VectorsToFile(fstream &graphxmlfile, title_index &titles, dictionary &words, edge_index &edges);
+
     void addKeyAttrs(ptree &graphml) const;
     void addWordNode(ptree &graph, string name, uint64_t id) const;
     void addDocumentNode(ptree &graph, string title, uint64_t id) const;
