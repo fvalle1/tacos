@@ -330,7 +330,7 @@ void GraphGenerator::VectorsToFile(fstream &graphxmlfile, title_index &titles, d
     cout<<"adding "<< nEdges <<" edges.."<<endl;
     BOOST_FOREACH(Weight_WordTitle e,edges){
                     printf("\r%d/%lu edges",++cEdge, nEdges);
-                    if (cEdge%1000==0){
+                    if (cEdge%100000==0){
                         graphxmlfile.flush();//flush file
                     }
                     auto wordIndex = words.find(e.second.first)->second.first;
