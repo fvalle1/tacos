@@ -15,7 +15,7 @@ set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
 set(BOOST_ROOT ~/boost)
 
-find_package(Boost 1.67.0 COMPONENTS system timer random REQUIRED)
+find_package(Boost 1.65.0 COMPONENTS system timer random REQUIRED)
 if(Boost_FOUND)
     include_directories(${Boost_INCLUDE_DIRS})
     message(STATUS "Boost_INCLUDE_DIRS: ${Boost_INCLUDE_DIRS}")
@@ -24,7 +24,7 @@ if(Boost_FOUND)
 
     include_directories(
             ~/anaconda3/include
-            ~/Developer/pcg
+            pcg
     )
 
     add_executable(

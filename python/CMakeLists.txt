@@ -1,5 +1,5 @@
 #python modules
-find_package(Boost 1.67.0 COMPONENTS python36 timer REQUIRED)
+find_package(Boost 1.65.0 COMPONENTS python36 timer REQUIRED)
 
 find_package(PythonLibs 3.6 REQUIRED)
 include_directories(${PYTHON_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS})
