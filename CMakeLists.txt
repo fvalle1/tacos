@@ -23,13 +23,11 @@ if(Boost_FOUND)
     message(STATUS "Boost_VERSION: ${Boost_VERSION}")
     message(STATUS "Boost_VERSION: ${BOOST_ROOT}")
     include_directories(
-            ~/anaconda3/include
             pcg
     )
 
     add_executable(
             data_mining
-            TelegramWatch.cxx
             main.cpp
             MainTable.cxx
             SamplingModel.cxx
@@ -39,7 +37,6 @@ if(Boost_FOUND)
             LabelsReshuffler.cxx)
 
     target_link_libraries(data_mining ${Boost_LIBRARIES})
-    target_link_libraries(data_mining curl)
 endif()
 
 add_subdirectory(python)
