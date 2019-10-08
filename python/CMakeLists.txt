@@ -1,5 +1,6 @@
 #python modules
-find_package(Boost 1.65.0 COMPONENTS python timer REQUIRED)
+find_package(Boost 1.65.0 COMPONENTS python36 timer REQUIRED)
+
 find_package(PythonLibs 3.6 REQUIRED)
 include_directories(${PYTHON_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS})
 message(STATUS "Boost_INCLUDE_DIRS: ${Boost_INCLUDE_DIRS}")
@@ -25,4 +26,4 @@ set_target_properties(tacos PROPERTIES PREFIX "" )
 # must be .so (not .dylib)
 set_target_properties(tacos PROPERTIES SUFFIX ".so")
 
-target_link_libraries(tacos ${PYTHON_LIBRARIES} ${Boost_LIBRARIES} graphgenerator)
+target_link_libraries(tacos ${PYTHON_LIBRARIES} ${Boost_LIBRARIES} graphgenerator curl)

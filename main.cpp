@@ -1,4 +1,5 @@
 #include "MainTable.h"
+#include "TelegramWatch.h"
 #include "SamplingModel.h"
 #include "GraphGenerator.h"
 #include "LabelsReshuffler.h"
@@ -11,6 +12,8 @@ int main(int argc, const char** argv) // minimal test driver
     printf("Running Tool for Analysis of COmplex Systems\n");
 #pragma omp parallel
     if(omp_get_thread_num()==0) printf("threads: %d\n", omp_get_num_threads());
+
+    TelegramWatch watch("thesis");
 
     MainTable* TCGA;
     GraphGenerator* G;
@@ -65,7 +68,7 @@ int main(int argc, const char** argv) // minimal test driver
                 TCGA->~MainTable();
                 break;
             case 7:
-                G = new GraphGenerator(5000, 1.1 ,true, true);
+                G = new GraphGenerator(20000, 1.1 ,true, true);
                 G->MakeGraph();
                 delete G;
                 break;
