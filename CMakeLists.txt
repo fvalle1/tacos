@@ -42,4 +42,4 @@ if(Boost_FOUND)
     target_link_libraries(data_mining curl)
 endif()
 
-add_subdirectory(python)
+#add_subdirectory(python)
