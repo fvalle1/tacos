@@ -29,7 +29,6 @@ if(Boost_FOUND)
 
     add_executable(
             data_mining
-            TelegramWatch.cxx
             main.cpp
             MainTable.cxx
             SamplingModel.cxx
