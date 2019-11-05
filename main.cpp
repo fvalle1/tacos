@@ -2,6 +2,7 @@
 #include "SamplingModel.h"
 #include "GraphGenerator.h"
 #include "LabelsReshuffler.h"
+#include <boost/timer/timer.hpp>
 #include <omp.h>
 
 
@@ -13,7 +14,8 @@ int main(int argc, const char** argv) // minimal test driver
     if(omp_get_thread_num()==0) printf("threads: %d\n", omp_get_num_threads());
 
     #TelegramWatch watch("thesis");
-
+    boost::timer::auto_cpu_timer()
+    
     MainTable* TCGA;
     GraphGenerator* G;
 
