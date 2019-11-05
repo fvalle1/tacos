@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.12)
 project(thesis_data_mining)
 
 set(CMAKE_CXX_STANDARD 14)
@@ -21,7 +21,7 @@ if(Boost_FOUND)
     message(STATUS "Boost_INCLUDE_DIRS: ${Boost_INCLUDE_DIRS}")
     message(STATUS "Boost_LIBRARIES: ${Boost_LIBRARIES}")
     message(STATUS "Boost_VERSION: ${Boost_VERSION}")
-    message(STATUS "Boost_VERSION: ${BOOST_ROOT}")
+
     include_directories(
             ~/anaconda3/include
             pcg
@@ -29,7 +29,6 @@ if(Boost_FOUND)
 
     add_executable(
             data_mining
-            TelegramWatch.cxx
             main.cpp
             MainTable.cxx
             SamplingModel.cxx
@@ -39,7 +38,7 @@ if(Boost_FOUND)
             LabelsReshuffler.cxx)
 
     target_link_libraries(data_mining ${Boost_LIBRARIES})
-    target_link_libraries(data_mining curl)
+    #target_link_libraries(data_mining curl)
 endif()
 
-add_subdirectory(python)
+#add_subdirectory(python)
