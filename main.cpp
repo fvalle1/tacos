@@ -14,7 +14,7 @@ int main(int argc, const char** argv) // minimal test driver
     if(omp_get_thread_num()==0) printf("threads: %d\n", omp_get_num_threads());
 
     #TelegramWatch watch("thesis");
-    boost::timer::auto_cpu_timer()
+    boost::timer::auto_cpu_timer();
     
     MainTable* TCGA;
     GraphGenerator* G;
