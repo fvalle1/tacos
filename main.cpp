@@ -15,7 +15,7 @@ int main(int argc, const char** argv) // minimal test driver
 
     //TelegramWatch watch("thesis");
     boost::timer::auto_cpu_timer();
-    
+
     MainTable* TCGA;
     GraphGenerator* G;
 
@@ -69,11 +69,7 @@ int main(int argc, const char** argv) // minimal test driver
                 TCGA->~MainTable();
                 break;
             case 7:
-<<<<<<< HEAD
-                G = new GraphGenerator(12000, 1.1 ,true, true);
-=======
                 G = new GraphGenerator(20000, 1.1 ,true, true);
->>>>>>> f0d5065b4f499450d449bbcbfbbc1a01addbbcb7
                 G->MakeGraph();
                 delete G;
                 break;
