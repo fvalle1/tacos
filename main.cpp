@@ -68,7 +68,7 @@ int main(int argc, const char** argv) // minimal test driver
                 TCGA->~MainTable();
                 break;
             case 7:
-                G = new GraphGenerator(5000, 1.1 ,true, true);
+                G = new GraphGenerator(12000, 1.1 ,true, true);
                 G->MakeGraph();
                 delete G;
                 break;
