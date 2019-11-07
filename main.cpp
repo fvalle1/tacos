@@ -1,20 +1,21 @@
 #include "MainTable.h"
-#include "TelegramWatch.h"
 #include "SamplingModel.h"
 #include "GraphGenerator.h"
 #include "LabelsReshuffler.h"
+#include <boost/timer/timer.hpp>
 #include <omp.h>
 
 
 int main(int argc, const char** argv) // minimal test driver
 {
     omp_set_nested(1);
-    printf("Running Tool for Analysis of COmplex Systems\n");
+    printf("Running Tool for Analysis of COmponent Systems\n");
 #pragma omp parallel
     if(omp_get_thread_num()==0) printf("threads: %d\n", omp_get_num_threads());
 
-    TelegramWatch watch("thesis");
-
+    //TelegramWatch watch("thesis");
+    boost::timer::auto_cpu_timer();
+    
     MainTable* TCGA;
     GraphGenerator* G;
 
@@ -68,7 +69,11 @@ int main(int argc, const char** argv) // minimal test driver
                 TCGA->~MainTable();
                 break;
             case 7:
+<<<<<<< HEAD
                 G = new GraphGenerator(12000, 1.1 ,true, true);
+=======
+                G = new GraphGenerator(20000, 1.1 ,true, true);
+>>>>>>> f0d5065b4f499450d449bbcbfbbc1a01addbbcb7
                 G->MakeGraph();
                 delete G;
                 break;
