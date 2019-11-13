@@ -1,5 +1,18 @@
 #python modules
-find_package(Boost 1.65.0 COMPONENTS python36 timer REQUIRED)
+if(UNIX)
+    set( BOOST_PYTHONLIB python37)
+else()
+    set( BOOST_PYTHONLIB python3)
+endif()
+
+# Check the architecture and set CMAKE_LIBRARY_ARCHITECTURE accordingly
+if(UNIX)
+    if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+        set(CMAKE_LIBRARY_ARCHITECTURE "x86_64-linux-gnu")
+    endif()
+endif()
+
+find_package(Boost 1.65.0 COMPONENTS ${BOOST_PYTHONLIB} timer REQUIRED)
 
 find_package(PythonLibs 3.6 REQUIRED)
 include_directories(${PYTHON_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS})
