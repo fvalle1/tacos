@@ -74,12 +74,12 @@ void GraphGenerator::MakeGraph() {
         auto geneIt = words.find(genename);
         if (geneIt != words.end()) {//if have info about word..can look for edges
             std::for_each(tokenizedline.begin() + 1, tokenizedline.begin() + 1 + fMaxStorableDocs,
-                          [&](string fpkm_string) {
+                          [&](const string& fpkm_string) {
                               auto currentRead = std::stoull(fpkm_string); //weight
                               //condition to work on
                               if (geneIt->second.second <= fMaxOccurrence) { //check checkable condition
                                   if (currentRead >= 1) {//avoid lenght error
-                                      if(currentRead > 10000) currentRead = 10000; //avoid segmentations
+                                      if(currentRead > 1e5) currentRead = 1e5; //avoid segmentations
                                       geneIt->second.first = -1; //add to nodes
                                       auto currentDocTitle = FullFilesList[currentDoc].substr(0, BioParameters::getSampleIdLenght());
                                       auto currentDocIterator = titles.find(currentDocTitle);
@@ -91,7 +91,6 @@ void GraphGenerator::MakeGraph() {
                                       }
                                   }
                               }
-
                               currentDoc++;
                           }
             );
