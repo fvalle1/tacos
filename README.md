@@ -1,4 +1,7 @@
 # tacos
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/be6d1ff50d6e427c9b512f906f37c238)](https://app.codacy.com/gh/fvalle1/tacos?utm_source=github.com&utm_medium=referral&utm_content=fvalle1/tacos&utm_campaign=Badge_Grade)
+
 Tool for Analysis of COmponents Systems
 
 ```
