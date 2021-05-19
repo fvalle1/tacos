@@ -38,7 +38,7 @@ if(Boost_FOUND)
             LabelsReshuffler.cxx)
 
     target_link_libraries(data_mining ${Boost_LIBRARIES})
-    #target_link_libraries(data_mining curl)
+    target_link_libraries(data_mining curl)
 endif()
 
-#add_subdirectory(python)
+add_subdirectory(python)
