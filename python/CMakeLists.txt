@@ -1,6 +1,6 @@
 #python modules
 if(UNIX)
-    set( BOOST_PYTHONLIB python37)
+    set( BOOST_PYTHONLIB python39)
 else()
     set( BOOST_PYTHONLIB python3)
 endif()
@@ -14,7 +14,7 @@ endif()
 
 find_package(Boost 1.65.0 COMPONENTS ${BOOST_PYTHONLIB} timer REQUIRED)
 
-find_package(PythonLibs 3.6 REQUIRED)
+find_package(PythonLibs 3.7 REQUIRED)
 include_directories(${PYTHON_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS})
 message(STATUS "Boost_INCLUDE_DIRS: ${Boost_INCLUDE_DIRS}")
 message(STATUS "Boost_LIBRARIES: ${Boost_LIBRARIES}")

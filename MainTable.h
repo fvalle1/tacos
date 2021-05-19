@@ -31,6 +31,7 @@ public:
     ~MainTable();
 
     void read(const char *tableFilename, bool saveAbundancesOccurrences);
+    void readNull(const char *tableFilename, bool saveAbundancesOccurrences = true, bool saveMeansVariances = true, bool considerZeros = true, uint8_t maxStatistics = 1);
     void readBinary();
 
     void SaveMeansVariances(const char *filename, bool considerZeros = false);

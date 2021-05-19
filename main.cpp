@@ -14,9 +14,9 @@ int main(int argc, const char** argv) // minimal test driver
     if(omp_get_thread_num()==0) printf("threads: %d\n", omp_get_num_threads());
 
     //TelegramWatch watch("thesis");
-    boost::timer::auto_cpu_timer();
+    auto stopwatch = boost::timer::auto_cpu_timer();
 
-    MainTable* TCGA;
+    MainTable* model;
     GraphGenerator* G;
 
     if(argc < 2){
@@ -33,40 +33,40 @@ int main(int argc, const char** argv) // minimal test driver
     }else {
         switch (std::atoi(argv[1])) {
             case 0:
-                TCGA = new MainTable();
-                TCGA->read("mainTable.csv", true);
-                TCGA->~MainTable();
+                model = new MainTable();
+                model->read("mainTable.csv", true);
+                model->~MainTable();
                 break;
             case 1:
-                TCGA = new MainTable();
-                TCGA->read("mainTable.csv", true);
-                TCGA->ExtimateCorrelations();
-                TCGA->~MainTable();
+                model = new MainTable();
+                model->read("mainTable.csv", true);
+                model->ExtimateCorrelations();
+                model->~MainTable();
                 break;
             case 2:
-                TCGA = new MainTable();
-                TCGA->SaveMeansVariances("mainTable.csv", true);
-                TCGA->~MainTable();
+                model = new MainTable();
+                model->SaveMeansVariances("mainTable.csv", true);
+                model->~MainTable();
                 break;
             case 3:
-                TCGA = new SamplingModel();
-                ((SamplingModel *) (TCGA))->GenerateNullData(1);
-                TCGA->~MainTable();
+                model = new SamplingModel();
+                ((SamplingModel *) (model))->GenerateNullData(1);
+                model->~MainTable();
                 break;
             case 4:
-                TCGA = new MainTable();
-                TCGA->read("nullTable.csv", true);
-                TCGA->~MainTable();
+                model = new MainTable();
+                model->readNull("nullTable.csv", true, true);
+                model->~MainTable();
                 break;
             case 5:
-                TCGA = new MainTable();
-                TCGA->read("nullTable.csv", true);
-                TCGA->ExtimateCorrelations("correlations_null.dat");
-                TCGA->~MainTable();
+                model = new MainTable();
+                model->readNull("nullTable.csv", true);
+                model->ExtimateCorrelations("correlations_null.dat");
+                model->~MainTable();
             case 6:
-                TCGA = new MainTable();
-                TCGA->SaveMeansVariances("nullTable.csv", true);
-                TCGA->~MainTable();
+                model = new MainTable();
+                model->readNull("nullTable.csv", false, true);
+                model->~MainTable();
                 break;
             case 7:
                 G = new GraphGenerator(20000, 1.1 ,true, true);
