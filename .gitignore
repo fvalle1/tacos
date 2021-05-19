@@ -40,3 +40,4 @@ master/
 \.DS_Store
 
 build/
+.vscode/settings.json
