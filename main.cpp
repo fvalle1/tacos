@@ -8,7 +8,7 @@
 
 int main(int argc, const char** argv) // minimal test driver
 {
-    omp_set_nested(1);
+    omp_set_max_active_levels(5);
     printf("Running Tool for Analysis of COmponent Systems\n");
 #pragma omp parallel
     if(omp_get_thread_num()==0) printf("threads: %d\n", omp_get_num_threads());
